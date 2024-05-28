@@ -14,21 +14,8 @@ void setup() {
 
 void loop() {
   
-  robot.setMotorTarget(1,DRIVE, 5000);
-  robot.setMotorTarget(2,DRIVE, 5000);
-  delay(500);
+  robot.setMotorPowers(DRIVE,DRIVE);
+  delay(5000);
   robot.setMotorPowers(STOP,STOP);
-  
-  if (robot.readSonicSensorCM(A3) < 14){
-  
-
-  robot.setMotorPowers(STOP,STOP);
-
-  // Servo 1 is 180º, Servo 2 is like 270º or something
-  robot.resetEncoder(1);
-  robot.resetEncoder(2);
-  //Still need to code Servo 2 (full movement) as well as need to fix the servo 1 after testing it.
-  } else {
-  
-  }
+  delay(20000);
 }
