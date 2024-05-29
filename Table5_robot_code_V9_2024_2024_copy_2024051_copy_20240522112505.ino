@@ -21,9 +21,7 @@ void loop() {
   if (robot.readSonicSensorCM(A3) < 2.5){
 
   robot.setMotorTarget(1,SPIN,3600);
-  delay(3600);
   robot.setMotorTarget(2,-SPIN,3600);
-  delay(3600);
 
   robot.setMotorPowers(STOP,STOP);
 
@@ -33,8 +31,7 @@ void loop() {
   //Still need to code Servo 2 (full movement) as well as need to fix the servo 1 after testing it.
   } else {
   robot.setMotorTarget(1,DRIVE, 3600);
-  delay(3600);
   robot.setMotorTarget(2,DRIVE, 3600);
-  delay(3600);
+
   }
 }
