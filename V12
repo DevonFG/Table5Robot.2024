@@ -1,0 +1,163 @@
+#include <PRIZM.h>  //Include all of the instructions for Tetrix stuff
+PRIZM robot;
+const int DRIVE = 360; // Forward and Backward speed
+const int SPIN = 180; // Spin speed
+const int OPENSERVO1 = 90; //change this to be the degrees needed to open the servo
+const int OPENSERVO2 = 180; //change this to be the degrees needed to open the servo
+const int CLOSESERVO1 = 170; //change this to be the degrees needed to close the servo
+const int CLOSESERVO2 = 0; //change this to be the degrees needed to close the servo
+const int TURN90 = 1695; //change this to be the time is takes to turn 90º and comment direction (left or right)
+const int SERVODELAY = 3000; //change this to the appropriate delay needed when moving the servos
+int run = 0;
+
+//Drive speed stays the same
+//Spin speed stays the same
+//Open servo 1 is __
+//Open servo 2 is __
+//Close servo 1 is __
+//Close servo 2 is __
+//Turn90 stays the same
+//Servo delay can change, prefered as short as possible though
+//run doesn't change up here, it's just a count so the program doesn't go back and do the same step again
+
+//Action is a string, either open or close
+void servos(int Action) {
+  if (Action == "open") {
+    robot.setServoPosition(1, OPENSERVO1);
+    robot.setServoPosition(2, OPENSERVO2);
+  } else if (Action == "close") {
+    robot.setServoPosition(1, CLOSESERVO1);
+    robot.setServoPosition(2, CLOSESERVO2);
+  }
+  delay(SERVODELAY);
+}
+
+//Direction is a string, either right or left
+//Degrees is a string, either 90 or 180
+void turn(int Direction, int Degrees) {
+  if (Degrees == 90) {
+    if (Direction == "right") {
+      robot.setMotorTarget(1, SPIN, -TURN90);
+      robot.setMotorTarget(2, SPIN, TURN90);
+    } else if (Direction == "left" ) {
+      robot.setMotorTarget(1, SPIN, TURN90);
+      robot.setMotorTarget(2, SPIN, -TURN90);
+    }
+  }
+  if (Degrees == 180) {
+    if (Direction == "right") {
+      robot.setMotorTarget(1, SPIN, -TURN90);
+      robot.setMotorTarget(2, SPIN, TURN90);
+      delay(TURN90*2);
+    } else if (Direction == "left" ) {
+      robot.setMotorTarget(1, SPIN, TURN90);
+      robot.setMotorTarget(2, SPIN, -TURN90);
+    }
+  }
+}
+
+//Time is a number, put the miliseconds to move
+//Direction is a string, either forward or backward
+void move(int Time, int Direction) {
+  if (Direction == "forward") {
+    robot.setMotorTarget(1, DRIVE, Time);
+    robot.setMotorTarget(2, DRIVE, Time);
+  } else if (Direction == "backward") {
+    robot.setMotorTarget(1, DRIVE, -Time);
+    robot.setMotorTarget(2, DRIVE, -Time);
+  }
+}
+
+//This is just to reset the encoders, no specific things
+void resetEncoder() {
+  robot.resetEncoder(1);
+  robot.resetEncoder(2);
+}
+
+void setup() {
+  // put your setup code here, to run once:
+  robot.PrizmBegin(); // Tells robot to start
+  robot.setMotorInvert(2,1); // (which motor, 1=yes/0=no)
+}
+
+void loop() {
+//MOST numbers will need to change, most numbers are 0 so we know to substitue them.
+
+if (run == 0) {
+  servos("open");
+  run = 1;
+} else if (run == 1) {
+  move(5000, "forward"); //change the 0
+  resetEncoder();
+  run = 2;
+} else if (run == 2 && !robot.readMotorBusy(1)) {
+  turn("right", 90);
+  resetEncoder();
+  run = 3;
+} else if (run == 3 && !robot.readMotorBusy(1)) {
+  move(5000, "forward"); //change the 0
+  run = 4;
+  resetEncoder();
+} else if (run == 4 && !robot.readMotorBusy(1)) {
+  servos("close");
+  run = 5;
+} else if (run == 5 && !robot.readMotorBusy(1)) {
+  turn("right", 180);
+  run = 6;
+  resetEncoder();
+} else if (run == 6 && !robot.readMotorBusy(1)) {
+  move(5000, "forward"); //change the 0
+  run = 7;
+  resetEncoder();
+} else if (run == 7 && !robot.readMotorBusy(1)) {
+  turn("right", 90);
+  run = 8;
+  resetEncoder();
+} else if (run == 8 && !robot.readMotorBusy(1)) {
+  move(5000, "forward"); //change the 0
+  run = 9;
+  resetEncoder();
+} else if (run == 9 && !robot.readMotorBusy(1)) {
+  servos("open");
+  run = 10;
+} else if (run == 10 && !robot.readMotorBusy(1)) {
+  move(5000, "backward"); //change the 0
+  run = 11;
+  resetEncoder();
+} else if (run == 11 && !robot.readMotorBusy(1)) {
+  turn("right", 90);
+  run = 12;
+  resetEncoder();
+} else if (run == 12 && !robot.readMotorBusy(1)) {
+  move(5000, "forward"); //change the 0
+  run = 13;
+  resetEncoder();
+} else if (run == 13 && !robot.readMotorBusy(1)) {
+  servos("close");
+  run = 14;
+} else if (run == 14 && !robot.readMotorBusy(1)) {
+  move(5000, "backward"); //change the 0
+  run = 15;
+  resetEncoder();
+} else if (run == 15 && !robot.readMotorBusy(1)) {
+  turn("left", 90);
+  run = 16;
+  resetEncoder();
+} else if (run == 16 && !robot.readMotorBusy(1)) {
+  move(5000, "forward"); //change the 0
+  run = 17;
+  resetEncoder();
+} else if (run == 17 && !robot.readMotorBusy(1)) {
+  servos("open");
+  run = 18;
+} else if (run == 18 && !robot.readMotorBusy(1)) {
+  move(5000, "backward"); //change the 0
+  run = 19;
+  resetEncoder();
+} else if (run > 18 && !robot.readMotorBusy(1)) {
+  robot.setRedLED(HIGH); 
+  delay(250);
+  robot.setRedLED(LOW);
+  delay(250);
+}
+}
